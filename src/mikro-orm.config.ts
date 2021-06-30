@@ -1,16 +1,21 @@
 import { Post } from "./entities/Post";
 import { __prod__ } from "./constants";
-import { MikroORM } from "@mikro-orm/core";
 import path from "path";
 import { User } from "./entities/User";
+import { Options } from '@mikro-orm/core';
 
-export default {
+const config: Options = {
   migrations: {
     path: path.join(__dirname, "../src/migrations"),
     pattern: /^[\w-]+\d+\.[tj]s$/,
+    disableForeignKeys: false,
+
   },
   entities: [Post, User],
-  dbName: "typescript",
-  type: "postgresql",
+  dbName: 'lireddit',
+  type: 'postgresql',
+  password: 's3xy',
   debug: !__prod__,
-} as Parameters<typeof MikroORM.init>[0];
+
+}
+export default config;
