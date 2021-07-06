@@ -7,7 +7,7 @@ import {
   FormErrorMessage,
   Box,
   Button,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 
