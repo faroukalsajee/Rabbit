@@ -12,6 +12,8 @@ import redis from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis'
 import { MyContext } from "./types";
+import cors from "cors";
+
 
 
 const main = async () => {
@@ -24,24 +26,29 @@ const main = async () => {
   const redisClient = redis.createClient()
 
   app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
+  app.use(
     session({
-      name: 'qid',
+      name: "qid",
       store: new RedisStore({
         client: redisClient,
         disableTouch: true,
-
       }),
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true,
-        sameSite: "lax",
-        secure: __prod__, //cookie only works in https
+        sameSite: "lax", // csrf
+        secure: __prod__, // cookie only works in https
       },
       saveUninitialized: false,
-      secret: "ergqerhqerjqerjq",
+      secret: "qowiueojwojfalksdjoqiwueo",
       resave: false,
     })
-  )
+  );
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
@@ -52,12 +59,14 @@ const main = async () => {
     context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),
   })
 
-  apolloServer.applyMiddleware({ app })
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+  });
 
   app.listen(4000, () => {
-    console.log('server started on port 4000');
-
-  })
+    console.log("server started on localhost:4000");
+  });
 };
 
 main().catch((err) => {
