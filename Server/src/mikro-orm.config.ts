@@ -8,13 +8,12 @@ const config: Options = {
   migrations: {
     path: path.join(__dirname, "../src/migrations"),
     pattern: /^[\w-]+\d+\.[tj]s$/,
-    disableForeignKeys: false,
+    disableForeignKeys: true,
 
   },
   entities: [Post, User],
-  dbName: 'lireddit',
-  type: 'postgresql',
-  password: 's3xy',
+  dbName: "lireddit",
+  type: "postgresql",
   debug: !__prod__,
 
 }
